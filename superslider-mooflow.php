@@ -4,7 +4,7 @@ Plugin Name: SuperSlider-Mooflow
 Plugin URI: http://wp-superslider.com/superslider
 Description: This is an itunes like image scrubber. Uses the mootools javascript plugin Mooflow from http://www.outcut.de/MooFlow/
 Author: Daiv Mowbray
-Version: 0.2
+Version: 0.4
 Author URI: http://wp-superslider.com
 Tags: animation, animated, mooflow, gallery, slideflow, mootools 1.2, mootools, itunes, slider, superslider, lightbox, apple
 
@@ -23,7 +23,16 @@ Copyright 2008
     along with Collapsing Categories; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+/*
+v 0.4
+    -   added function to pull images from this post attached
+    -   added function to enter list of post ids
+    -   added option to enter random into ID, along with number, pulls x images from media library
+    -   changed the way the short code works. now runs with self closeing single tag [mooflow] 
+    -   fixed multiple mooflows on one page
+    -   added link to popover/attachment/parent with viewer option.
 
+*/
 if (!class_exists("ssFlow")) {
 	class ssFlow {
 	
@@ -41,8 +50,9 @@ if (!class_exists("ssFlow")) {
 		var $js_path;
 		var $js_added;
 		var $css_path;
+		var $css_loaded;
 		var $Flow_over_ride;
-		var $Milk_over_ride;
+		var $Slim_over_ride;
 		var $ssFlowOpOut;
 		var $ssBaseOpOut;
 		var $defaultAdminOptions;
@@ -107,10 +117,10 @@ if (!class_exists("ssFlow")) {
 				"css_theme" => "default",
 				"reflection" => "0.4",
 				"useautoplay" => "true",
-				"heightratio" => "0.6",
+				"heightratio" => "0.7",
 				"offsety" => "10",
 				"startindex" => "0",
-				"interval" => "3000",
+				"interval" => "2500",
 				"factor" => "115",
 				"bgcolor" => "#fff",
 				"usecaption" => "true",
@@ -119,10 +129,14 @@ if (!class_exists("ssFlow")) {
 				"usewindowresize" => "true",
 				"usemousewheel" => "true",
 				"usekeyinput" => "true",
-				"addmilk" => "true",
+				"addslim" => "true",
 				"addjson" => "false",
 				"addajax" => "false",
-				"useviewer" => "false");
+				"useviewer" => "true",
+				"linked" => "image",
+				"pop_size" => 'medium',
+                "image_size" => 'thumbnail'
+                );
 		
 		
 		$defaultOptions = get_option($this->AdminOptionsName);
@@ -150,6 +164,7 @@ if (!class_exists("ssFlow")) {
 
   			$this->defaultAdminOptions = $this->set_default_admin_options();
   			$this->ssFlowOpOut = get_option($this->AdminOptionsName);
+  			$this->js_path = WP_CONTENT_URL . '/plugins/'. plugin_basename(dirname(__FILE__)) . '/js/';
   			
   			extract($this->ssFlowOpOut);
   			//$this->Flow_over_ride = $ss_global_over_ride;
@@ -160,19 +175,32 @@ if (!class_exists("ssFlow")) {
 			}else{
 			$this->base_over_ride = 'false';
 			}
-			if (class_exists('ssMilk')) {
-				$this->Milk_over_ride = 'true';
-//echo' ssMilk is here and over ride is : '.$this->Milk_over_ride.' :';
+			if (class_exists('ssSlim')) {
+				$this->Slim_over_ride = 'true';
 			}else{
-			$this->Milk_over_ride = 'false';
+			$this->Slim_over_ride = 'false';
 			}
 			
   			$this->set_flow_paths($css_load, $css_theme);
   			
   			add_action( 'admin_menu', array(&$this,'flow_setup_optionspage'));					
-			//add_action('wp_print_scripts', array(&$this,'flow_add_javascript'),3); //this loads the mootools scripts.
 			add_action ( 'template_redirect' , array(&$this,'flow_scan') );
-            add_shortcode ( 'mooflow' , array(&$this, 'flow_shortcode_out')); //disabled as it fails to work
+            add_shortcode ( 'mooflow' , array(&$this, 'flow_shortcode_out')); 
+            
+            wp_register_script(
+			'moocore',
+			$this->js_path.'mootools-1.2.1-core.js',
+			NULL, '1.2.1');
+			
+			wp_register_script(
+			'moomore',
+			$this->js_path. 'mootools-1.2-more.js',
+			array( 'moocore' ), '1.2');
+					
+			wp_register_script(
+			'mooflow',
+			$this->js_path. 'mooflow.js',
+			array( 'moocore' ), '1.2');
 
 	}
 	
@@ -222,21 +250,16 @@ if (!class_exists("ssFlow")) {
 	function flow_add_js(){
 		extract($this->ssFlowOpOut);
 
-		$this->js_path = WP_CONTENT_URL . '/plugins/'. plugin_basename(dirname(__FILE__)) . '/js/';
-
         if (!is_admin() && $this->js_added != 'true') {				
             if (function_exists('wp_enqueue_script')) {
                 if ($this->base_over_ride != "on") {
-                    if ($load_moo == 'on'){
-                    echo "\t<!-- SuperSlider Flow plugin available at http://wp-superslider.com/ -->\n";		
-                        //wp_enqueue_script('moocore', $js_path.'mootools-1.2-core.js' NULL, 1.2);		
-                        //wp_enqueue_script('moomore', $js_path.'mootools-1.2-more.js', array('moocore'), 1.2);
-                        echo "\t".'<script src="'.$this->js_path.'mootools-1.2.1-core.js" type="text/javascript"></script> '."\n";
-                        echo "\t".'<script src="'.$this->js_path.'mootools-1.2-more.js" type="text/javascript"></script> '."\n";
-                    }
+                    if ($load_moo == 'on'){	
+                        wp_enqueue_script('moocore');		
+						wp_enqueue_script('moomore');
+					 }
                 }
+             //wp_enqueue_script('mooflow');	
             echo "\t".'<script src="'.$this->js_path.'mooflow.js" type="text/javascript"></script> '."\n";
-
             
             }// is wp_enqueue_script
             
@@ -244,29 +267,28 @@ if (!class_exists("ssFlow")) {
         $this->js_added = 'true';
 	}
 	function add_viewer($useviewer) {
-	       if ($useviewer == 'true' && $thisview != 'true'){
+	       if ($useviewer == 'true' ){
                 echo "\t".'<script src="'.$this->js_path.'mooflowviewer.js" type="text/javascript"></script> '."\n";
            }
-          $thisview = 'true';
 	}
-	function add_Milk() {
-	   if ($this->Milk_over_ride != "true" && $addmilk == 'true') { 
-                echo "\t".'<script src="'.$this->js_path.'milkbox.js" type="text/javascript"></script> '."\n";
-                echo "\t".'<link type="text/css" rel="stylesheet" rev="stylesheet" href="'.$this->css_path.'/milkbox.css" media="screen" />'."\n";
+	function add_Slim() {
+	   extract($this->ssFlowOpOut);
+	   if ($this->Slim_over_ride != "true" && $addslim == 'true') { 
+                echo "\t".'<script src="'.$this->js_path.'slimbox.js" type="text/javascript"></script> '."\n";
+                echo "\t".'<link type="text/css" rel="stylesheet" rev="stylesheet" href="'.$this->css_path.'/slimbox.css" media="screen" />'."\n";
         }
 	}
-	function flow_add_css() {
-    
+	function flow_add_css() {    
         extract($this->ssFlowOpOut);
         if (class_exists('ssBase')) {
 					extract($this->ssBaseOpOut);					
 				}	
-        echo "\t<!-- SuperSlider MooFlow script available at http://wp-superslider.com/ -->\n";							
-		if ($css_load != 'off') {
+        						
+		if ($css_load != 'off' && $this->css_loaded != 'true') {
 		      echo "\t".'<link type="text/css" rel="stylesheet" rev="stylesheet" href="'.$this->css_path.'/mooflow.css" media="screen" />'."\n";
-		/*}
-		if ($css_load != 'off' && $useviewer == 'true') {*/
-		      echo "\t".'<link type="text/css" rel="stylesheet" rev="stylesheet" href="'.$this->css_path.'/mooflowviewer.css" media="screen" />'."\n";
+		      
+		      if ($useviewer == 'true') echo "\t".'<link type="text/css" rel="stylesheet" rev="stylesheet" href="'.$this->css_path.'/mooflowviewer.css" media="screen" />'."\n";
+		$this->css_loaded = 'true';
 		}
 
    }
@@ -277,13 +299,57 @@ if (!class_exists("ssFlow")) {
   		return $this->ssFlowOpOut;
 	}
 
+    function flow_get_random_posts($numposts = '5',$category = '') {
+        global $wpdb ;  // on windows server RAND() needs to be NEWID() 
+        $notfirst = false;        
+        if($category == ''):
+            $sql = "SELECT $wpdb->posts.ID 
+                    FROM $wpdb->posts 
+                    WHERE $wpdb->posts.post_status = 'inherit' 
+                    AND $wpdb->posts.post_type = 'attachment'
+                    ORDER By RAND()
+                    LIMIT $numposts";
+        else:
+            
+                $sql = "SELECT $wpdb->posts.ID ";
+                $sql.= "FROM $wpdb->posts, $wpdb->term_relationships, $wpdb->term_taxonomy ";
+                $sql.= "WHERE $wpdb->posts.post_status = 'inherit' ";
+                $sql.= "AND $wpdb->posts.post_type = 'attachment' ";
+            /**/	$sql.= 'AND ';
+                $sql.= '( ';
+                $sql.= "$wpdb->posts.ID = $wpdb->term_relationships.object_id ";
+                $sql.= "AND $wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id ";
+                $sql.= "AND $wpdb->term_taxonomy.term_id = $category ";
+                    $sql.= ')';
+                $sql.= "ORDER By RAND() ";
+                $sql.= "LIMIT $numposts ";
+    
+        endif;
+        $the_ids = $wpdb->get_results($sql);
+        shuffle($the_ids);
+    
+        if ($the_ids) return $the_ids;
+        
+    }
+    function array_push_assoc($array, $key, $value){
+                         $array[$key] = $value;
+                         return $array;
+    }
     /**
 	* add the accordion code
 	*/
     function flow_shortcode_out ($atts, $content='') {
-
-         //extract(shortcode_atts(array(
+        global $post;
+        
+        srand((double)microtime()*1000000); 
+		$this->flow_id = rand(0,1000); 
+        
          $atts = shortcode_atts(array(
+            'order'      => 'ASC',
+			'orderby'    => 'menu_order ID',
+            'id' => $post->ID,
+            'numposts'  =>  '',
+            'catid'  =>  '',
             'reflection' => '',
             'useautoplay' => '',
             'heightratio' => '',
@@ -300,26 +366,121 @@ if (!class_exists("ssFlow")) {
             'usekeyinput' => '',
             'addajax' => '',
             'addjson' => '',
-            'addmilk' => '',
-            'useviewer' => ''
+            'addslim' => '',
+            'useviewer' => '',
+            'linked'    =>  ''
             ), $atts);
 
 		// opdate options if any changes with shortcode
-		if ($atts !='') {		
-		      $this->flow_change_options($atts);	
-         }
+		if ($atts !='') $this->flow_change_options($atts);	
+         
 	       
-        extract($this->ssFlowOpOut);
-	        
-		srand((double)microtime()*1000000); 
-		$this->flow_id = rand(0,1000);
+        extract($this->ssFlowOpOut);	    
+
+        if (array_key_exists('id', $atts) && ( $atts['id'] != '')) {
+            $id = $atts['id'];
+            } else{
+            $id = $post->ID;;
+            }
+
+		if (strpos($id, ',')) {	
+			$idz = explode(', ', $id); // turns the variable string $id into an array $idz
+			$all_attachments = array();	// pre define the master array
+
+				foreach ($idz as $id) {		//loop through the array of posts and get their attachments		
+					$id = intval($id);
+					$attachments = get_children("post_parent=$id&post_type=attachment&post_mime_type=image&orderby={$orderby}");
+					
+				if($attachments !== false)$all_attachments += $attachments;
+				}
+
+		} elseif ($id =='random') {
+
+              $catid = '';// this needs to be fixed in the sql call above.
+              $idz = $this->flow_get_random_posts($numposts,$catid);
+              $all_attachments = array();
+
+             foreach ($idz as $id) {
+                
+					$id = intval($id->ID);
+                    $attachments = get_post( $id, OBJECT );
+                    $type = $attachments->post_mime_type;
+                    $att = 'image';
+                    $pos = strpos ( $type,$att );
+
+                if($pos !== false) {
+
+                    $key = $attachments->ID;                   
+                    if($attachments !== false) $all_attachments = $this->array_push_assoc($all_attachments, $key, $attachments);                    
+                }
+			}	
+             
+        } elseif ($id == $post->ID) { 
+             				
+                $all_attachments = get_children( array('post_parent' => $id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );			   
+           
+        
+        } 
+        
+
+		if ( is_feed() ) {
+			$output = "\n";
+			foreach ( $all_attachments as $id => $attachment )
+				$output .= wp_get_attachment_link($id, $size = 'thumbnail', true) . "\n";
+			return $output;
+		}
+
 		
 		$output = $this->add_viewer($useviewer);
-        $output = $this->flow_starter();// write in the javascript flow starter
+        $output .= $this->flow_starter();// write in the javascript flow starter
                 
         // wrap the content in a mooflow div
-        $output .= "<div id=\"mooflow".$this->flow_id."\" class=\"moo\">".$content."</div>";
-        
+        $output .= '<div id="mooflow'.$this->flow_id.'" class="moo" style="visibility: hidden;">';
+           
+          if ($all_attachments !== false) {
+           foreach ( $all_attachments as $id => $attachment ) {
+           
+			$my_parent = ($attachment->post_parent);
+			$parent_title = get_the_title($my_parent);
+			$parent_link = get_permalink($my_parent);
+			$att_page = get_attachment_link($id, NULL , true);
+			$image = wp_get_attachment_image_src($id, $size = $image_size);// $image_size, $pop_size
+			$att_image = wp_get_attachment_image_src($id, $size = $pop_size);
+		
+
+			if ( $linked == 'image') {
+				$linkto = 'href="'.$att_image[0].'"';
+				$a_rel = 'rel="image"';
+				$a_class = ' tool';
+				$a_title = 'title="'.$attachment->post_title.'"';
+				$alt = 'alt="'.$attachment->post_excerpt.' :: '.$attachment->post_content.'"';
+			}
+			elseif ($linked == 'parent') { 
+				$linkto = 'href="'.$parent_link.'"';
+				$a_rel = 'rel="link"';
+				$a_class = ' ';
+				$a_title = 'title="'.$parent_title.'"';
+				$alt = 'alt="'.$attachment->post_excerpt.' :: '.$attachment->post_content.'"';
+			}
+			elseif ($linked == 'attach') {
+				$linkto = 'href="'.$att_page.'"';
+				$a_rel = 'rel="link"';
+				$a_class = ' ';
+				$a_title = 'title="'.$attachment->post_title.'"';
+				$alt = 'alt="'.$attachment->post_excerpt.' :: '.$attachment->post_content.'"';
+			}
+        	
+        	if ($useviewer !== 'false') $output .= "\n\t"."<a $linkto $a_rel class=\"$a_class\" $a_title >"."\n";
+			
+		// output the main images  alt=\"{$attachment->post_title}\"
+			$output .= "<img id=\"slide-$id\" src=\"$image[0]\"  $a_title  $alt width=\"$image[1]\" height=\"$image[2]\" style=\"visibility: hidden; opacity: 0;\" />";		
+			
+			if ($useviewer !== 'false') $output .= "</a>"."\n";
+			
+			
+		 } // end foreach	
+        } // end if attachments are empty 
+        $output .= $content.'</div>';
         return do_shortcode($output);
         
     }
@@ -330,7 +491,7 @@ if (!class_exists("ssFlow")) {
         /*
         * this is to bind the viewer to the mooflow, adds icons to the item links, and tooltips.
         */
-        if ($useviewer == 'true' && $addmilk != 'true'){
+        if ($useviewer == 'true' && $addslim != 'true'){
             $myviewer = "ssFlow".$this->flow_id.".attachViewer();";
         } else { $myviewer = ''; }
         
@@ -364,25 +525,20 @@ if (!class_exists("ssFlow")) {
                 });";
         } else { $myajax =''; }
     
-        if ($addmilk == 'true' && $useviewer != 'true') {
-            $myMilk = "onClickView: function(obj){
-                 //ssMilk.showFile(obj.href, obj.title + ' - ' + obj.alt); 
-                 //ssMilk.loadImage(obj.href, obj.title + ' - ' + obj.alt); 
-                //ssMilk.initMilkbox(obj.href, obj.title + ' - ' + obj.alt); 
-				//ssMilk.openMilkbox({gallery:(obj.href)});
-				//ssMilk.showThisImage(obj.href, obj.title + ' - ' + obj.alt);
-				//ssMilk.showGallery({ gallery:'image' });
+
+        if ($addslim == 'true' && $useviewer != 'true') {
+            $mySlim = "onClickView: function(obj){
+				Slimbox.open(obj.href, obj.title + ' - ' + obj.alt);
 
 			},";
-        } else {  $myMilk = ''; }
+        } else {  $mySlim = ''; }
         
-        $flowcontainer = 'mooflow'.$this->flow_id;
-        
+        $flowcontainer = 'mooflow'.$this->flow_id;        
 		$myflow = 'var myMooFlow'.$this->flow_id.' = {
 		start: function(){
 		
 		var ssFlow'.$this->flow_id.' = new MooFlow($(\''.$flowcontainer.'\'), {   
-				reflection : '.$reflection.',
+				useViewer : '.$useviewer.',
 				useAutoPlay: '.$useautoplay.',
 				heightRatio : '.$heightratio.',
 				offsetY : '.$offsety.',
@@ -396,8 +552,8 @@ if (!class_exists("ssFlow")) {
 				useWindowResize : '.$usewindowresize.',
 				useMouseWheel : '.$usemousewheel.',
 				useKeyInput : '.$usekeyinput.',
-				'.$myMilk.'
-				useViewer : '.$useviewer.'
+				'.$mySlim.'
+				reflection : '.$reflection.'
                             });
                 '.$myviewer.'
                 '.$myajax.'
@@ -426,7 +582,7 @@ if (!class_exists("ssFlow")) {
         foreach ( $posts as $mypost ) {         
                 if ( false !== strpos ( $mypost->post_content, 'mooflow' ) ) {   
                         add_action ( "wp_head", array(&$this,"flow_add_js"));
-                        add_action ( "wp_head", array(&$this,"add_Milk"));
+                        add_action ( "wp_head", array(&$this,"add_Slim"));
                         add_action ( "wp_head", array(&$this,"flow_add_css"));                                              
                         break; 
                 }
@@ -434,9 +590,10 @@ if (!class_exists("ssFlow")) {
          }
         /**
         *   call milk plugin class to load its scripts
+        *   milk has been discontinued
         */
 
-       if (class_exists('ssMilk')) { ssMilk::milk_scan();   }
+      // if (class_exists('ssMilk')) { ssMilk::milk_scan();   }
      }
 
 
@@ -466,6 +623,26 @@ if (!class_exists("ssFlow")) {
 		echo $box;		
 		include_once 'admin/js/superslider-flow-box.js';
 	}
+	
+    function ssflow_template($green)  {
+        if (class_exists('ssFlow')) {
+        echo 'this is the color:'.$green.' qwerty:';
+        
+        ssFlow::flow_add_css();
+        
+        
+       
+        add_action ( "wp_footer", "ssFlow::flow_add_js");
+        /* add_action ( "wp_print_scripts", array(&$this,"add_Slim"));
+        add_action ( "template_redirect", array(&$this,"ssflow_template_scripts"));
+        */
+        }
+    }
+    function ssflow_template_scripts()  {
+        add_action ( "wp_head", array(&$this,"flow_add_css"));
+    }
+    
+    
     
 }	//end class
 } //End if Class ssFlow

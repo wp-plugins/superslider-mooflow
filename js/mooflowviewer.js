@@ -51,7 +51,7 @@ MooFlow.implement({
 			this.loadImage(cur);
 			break;
 			case 'link':
-			window.open(cur.href, cur.target || '_blank');
+			window.open(cur.href, cur.target || '_self');
 			break;
 			default:
 		}
@@ -67,13 +67,15 @@ MooFlow.implement({
 		var c = cur.con.getFirst().getCoordinates();
 		this.image.inject(document.body);
 		this.image.addEvent('click', this.hideImage.bind(this));
-		this.image.setStyles({'left':c.left,'top':c.top,'width':c.width,'height':c.height,'position':'absolute','z-index':'103'});
+		this.image.setStyles({'left':c.left,'top':c.top,'width':c.width,'height':c.height,'position':'absolute','z-index':'1003'});
+		this.image.set({'class':'mfpopimage'});
 		var imageFx = new Fx.Morph(this.image, {transition: Fx.Transitions.Sine.easeOut});
 		var to = {x: this.image.get('width'), y: this.image.get('height')};
 		var box = document.getSize(), scroll = document.getScroll();
 		var pos = {x: scroll.x + ((box.x - to.x) / 2).toInt(), y: scroll.y + ((box.y - to.y) / 2).toInt() };
 		var vars = {left: pos.x, top: pos.y, width: to.x, height: to.y};
 		imageFx.start(vars);
+		
 	},
 	
 	hideImage: function(){

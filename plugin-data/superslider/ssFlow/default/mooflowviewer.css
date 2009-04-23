@@ -29,3 +29,9 @@
 	left:50%;
 	text-align:center;
 }
+.mfpopimage{
+    padding : 20px;
+    border: 1px solid #4788c0;
+    background: #fff;
+    cursor: pointer;
+}

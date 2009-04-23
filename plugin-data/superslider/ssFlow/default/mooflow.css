@@ -18,7 +18,7 @@
 	width:100%;
 	/*background:url(img/ajax_loader.gif) no-repeat 50% 0;
 	background:url(img/loader.gif) no-repeat 50% 0;*/
-	background:url(img/spinner.gif) no-repeat 50% 0;
+	background:url(img/loader.gif) no-repeat 50% 0;
 	padding:50px 0;
 }
 .mf div.caption {

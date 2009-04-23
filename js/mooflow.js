@@ -149,7 +149,7 @@ var MooFlow = new Class({
 		obj['con'] = new Element('div').inject(obj['div']);
 		img.setStyles({'vertical-align':'bottom', 'width':'100%', 'height':'50%'});
 img.set('rel','image');
-		img.addEvents({'click': this.clickTo.bind(this, i), 'dblclick': this.viewCallBack.bind(this, i)});
+		img.addEvents({'click': this.clickTo.bind(this, i), 'click': this.viewCallBack.bind(this, i)});//dblclick
 		img.inject(obj['con']);
 		
 		new Element('div').reflectflow({ 'img': img,
@@ -227,7 +227,7 @@ img.set('rel','image');
 		if(this.isFull = !this.isFull){
 			this.holder = new Element('div').inject(this.MooFlow,'after');
 			this.MooFlow.wraps(new Element('div').inject(document.body));
-			this.MooFlow.setStyles({'position':'absolute','z-index':'100','top':'0','left':'0','width':window.getSize().x,'height':window.getSize().y});
+			this.MooFlow.setStyles({'position':'absolute','z-index':'2005','top':'0','left':'0','width':window.getSize().x,'height':window.getSize().y});
 			if(this.options.useWindowResize){
 				this._initResize = this.initResize.bind(this);
 				window.addEvent('resize', this._initResize);

@@ -19,6 +19,19 @@
 	}
 	function addflow() {
 		var flow_code = '[mooflow ';
+		
+		var f = document.getElementById('id'); 
+		if (f.value != "") {
+			flow_code = flow_code+'id="'+f.value+'" ';
+			}
+		var f = document.getElementById('num'); 
+		if (f.value != "") {
+			flow_code = flow_code+'numPosts="'+f.value+'" ';
+			}
+		/*var f = document.getElementById('cat'); 
+		if (f.value != "") {
+			flow_code = flow_code+'catId="'+f.value+'" ';
+			}*/
 			
 		var f = document.getElementById('reflection'); 
 		if (f.value != "") {
@@ -81,20 +94,24 @@
 		if (f.checked) {
 			flow_code = flow_code+'useKeyInput="true" ';
 			}
-		var f = document.getElementById('addMilk'); 
+		var f = document.getElementById('addSlim'); 
 		if (f.checked) {
-			flow_code = flow_code+'addMilk="true" ';
+			flow_code = flow_code+'addSlim="true" ';
 			}
-		var f = document.getElementById('addJson'); 
+		var f = document.getElementById('linked'); 
+		if (f.value != "") {
+			flow_code = flow_code+'linked="'+f.value+'" ';
+			}
+	/*	var f = document.getElementById('addJson'); 
 		if (f.checked) {
 			flow_code = flow_code+'addJson="true" ';
 			}
 		var f = document.getElementById('addAjax'); 
 		if (f.checked) {
 			flow_code = flow_code+'addAjax="true" ';
-			}
+			}*/
 		
-				flow_code = flow_code+']place your images to flow here[/mooflow]';
+				flow_code = flow_code+']';
 				var destination1 = document.getElementById('content');
 				
 				if (destination1) {

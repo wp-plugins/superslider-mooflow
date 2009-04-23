@@ -46,10 +46,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				"usewindowresize" => "true",
 				"usemousewheel" => "true",
 				"usekeyinput" => "true",
-				"addmilk"   => "true",
+				"addslim"   => "true",
 				"addjson"   => "false",
 				"addajax"   => "false",
-				"useviewer" => "false");//end array
+				"useviewer" => "true",
+				"linked" => "image",
+				"pop_size" => 'medium',
+                "image_size" => 'thumbnail'
+                );//end array
 			
 			update_option($this->AdminOptionsName, $ssFlow_OldOptions);
 				
@@ -80,10 +84,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				'usewindowresize'=> $_POST["op_useWindowResize"],
 				'usemousewheel'	=> $_POST["op_useMouseWheel"],
 				'usekeyinput'	=> $_POST["op_useKeyInput"],
-				'addmilk'	    => $_POST["op_addMilk"],
+				'addslim'	    => $_POST["op_addslim"],
 				'addjson'	    => $_POST["op_addJson"],
 				'addajax'	    => $_POST["op_addAjax"],
-				'useviewer'		=> $_POST["op_useViewer"]
+				'useviewer'		=> $_POST["op_useViewer"],
+				'linked'		=> $_POST["op_linked"],
+				'pop_size'		=> $_POST["op_pop_size"],
+				'image_size'	=> $_POST["op_image_size"]
 			);	
 
 		update_option($this->AdminOptionsName, $ssFlow_newOptions);
@@ -304,6 +311,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
             <?php _e(' Key input off.',$ssFlow_domain); ?>
             </label>			
 	</li>
+
 	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 45%; float: left;">		
         <label  for="op_useVieweron">
             <input type="radio" 
@@ -314,21 +322,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
         <label  for="op_useVieweroff">
             <input type="radio" 
             <?php if($ssFlow_newOptions['useviewer'] == "false") echo $checked; ?>  name="op_useViewer" id="op_useVieweroff" value="false" />
-            <?php _e(' Viewer off.(Not compatible with Milkbox)',$ssFlow_domain); ?>
+            <?php _e(' Viewer off.(Not compatible with Slimbox)',$ssFlow_domain); ?>
             </label>			
 	</li>
 	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 50%; float: left;">		
-        <label  for="op_op_addMilkon">
+        <label  for="op_op_addslimon">
             <input type="radio" 
-            <?php if($ssFlow_newOptions['addmilk'] == "true") echo $checked; ?> name="op_addMilk" id="op_addMilkon" value="true" /> 
-            <?php _e(' add Milkbox on (default).',$ssFlow_domain); ?>
+            <?php if($ssFlow_newOptions['addslim'] == "true") echo $checked; ?> name="op_addslim" id="op_addslimon" value="true" /> 
+            <?php _e(' add Slimbox on (default).',$ssFlow_domain); ?>
             </label>
             <br />
-        <label  for="op_addMilk">
+        <label  for="op_addslim">
             <input type="radio" 
-            <?php if($ssFlow_newOptions['addmilk'] == "false") echo $checked; ?>  name="op_addMilk" id="op_addMilk" value="false" />
-            <?php _e(' Milkbox off.(Not compatible with Viewer)',$ssFlow_domain); ?>
+            <?php if($ssFlow_newOptions['addslim'] == "false") echo $checked; ?>  name="op_addslim" id="op_addslim" value="false" />
+            <?php _e(' Slimbox off.(Not compatible with Viewer)',$ssFlow_domain); ?>
             </label>			
+	</li><br style="clear:both;"/>
+	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px;">
+	 <label for="op_linked"><?php _e(' With Viewer on, Link images to:',$ssFlow_domain); ?></label>
+            <select name="op_linked" id="op_linked">
+                 <option <?php if($ssFlow_newOptions['image'] == "image") echo $selected; ?> id="image" value='image'> image</option>
+                 <option <?php if($ssFlow_newOptions['parent'] == "parent") echo $selected; ?> id="parent" value='parent'> parent</option>
+                 <option <?php if($ssFlow_newOptions['attach'] == "attach") echo $selected; ?> id="attach" value='attach'> attach</option>     
+            </select>
+       </li>
+       <li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px;">
+				<label for="op_pop_size"><?php _e(' Popover Image size to use.',$ssFlow_domain); ?></label>
+				<select name="op_pop_size" id="op_pop_size">
+					 <option <?php if($ssFlow_newOptions['pop_size'] == "thumbnail") echo $selected; ?> id="op_pop_size1" value='thumbnail'> thumbnail</option>
+					 <option <?php if($ssFlow_newOptions['pop_size'] == "medium") echo $selected; ?> id="op_pop_size2" value='medium'> medium</option>
+					 <option <?php if($ssFlow_newOptions['pop_size'] == "slideshow") echo $selected; ?> id="op_pop_size3" value='slideshow'>custom slideshow</option>
+					 <option <?php if($ssFlow_newOptions['pop_size'] == "large") echo $selected; ?> id="op_pop_size4" value='large'> large</option>
+					 <option <?php if($ssFlow_newOptions['pop_size'] == "full") echo $selected; ?> id="op_pop_size5" value='full'> full</option>
+				</select>
+				<span class="setting-description"><?php _e(' Which image size to set as default for Popovers with light boxes.',$ssFlow_domain); ?></span>
+	   </li>
+	   <li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px;">
+				<label for="op_image_size"><?php _e(' MooFlow Image size to use.',$ssFlow_domain); ?></label>
+				<select name="op_image_size" id="op_image_size">
+					 <option <?php if($ssFlow_newOptions['image_size'] == "thumbnail") echo $selected; ?> id="op_image_size1" value='thumbnail'> thumbnail</option>
+					 <option <?php if($ssFlow_newOptions['image_size'] == "medium") echo $selected; ?> id="op_image_size2" value='medium'> medium</option>
+					 <option <?php if($ssFlow_newOptions['image_size'] == "slideshow") echo $selected; ?> id="op_image_size3" value='slideshow'>custom slideshow</option>
+					 <option <?php if($ssFlow_newOptions['image_size'] == "large") echo $selected; ?> id="op_image_size4" value='large'> large</option>
+					 <option <?php if($ssFlow_newOptions['image_size'] == "full") echo $selected; ?> id="op_image_size5" value='full'> full</option>
+				</select>
+				<span class="setting-description"><?php _e(' Which image size to set as default for all Mooflow shows.',$ssFLow_domain); ?></span>
+			</li>
+<!--		<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 95%; float: left;">
+	<p>The following are still being developed. Advanced users may like to do some beta testing.</p>
 	</li>
 	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 45%; float: left;">		
         <label  for="op_addAjaxon">
@@ -355,7 +396,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
             <?php if($ssFlow_newOptions['addjson'] == "false") echo $checked; ?>  name="op_addJson" id="op_op_addJsonoff" value="false" />
             <?php _e(' addJson off (default).',$ssFlow_domain); ?>
             </label>			
-	</li>
+	</li>-->
 		
      </ul>
   </fieldset>
