@@ -4,7 +4,7 @@ Plugin Name: SuperSlider-Mooflow
 Plugin URI: http://wp-superslider.com/superslider
 Description: This is an itunes like image scrubber. Uses the mootools javascript plugin Mooflow from http://www.outcut.de/MooFlow/
 Author: Daiv Mowbray
-Version: 0.4
+Version: 0.4.1
 Author URI: http://wp-superslider.com
 Tags: animation, animated, mooflow, gallery, slideflow, mootools 1.2, mootools, itunes, slider, superslider, lightbox, apple
 
@@ -24,6 +24,8 @@ Copyright 2008
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
+v 0.4.1
+    -   fixed enqueue script to use wp_print_scripts instead of head.
 v 0.4
     -   added function to pull images from this post attached
     -   added function to enter list of post ids
@@ -258,8 +260,8 @@ if (!class_exists("ssFlow")) {
 						wp_enqueue_script('moomore');
 					 }
                 }
-             //wp_enqueue_script('mooflow');	
-            echo "\t".'<script src="'.$this->js_path.'mooflow.js" type="text/javascript"></script> '."\n";
+             wp_enqueue_script('mooflow');	
+            //echo "\t".'<script src="'.$this->js_path.'mooflow.js" type="text/javascript"></script> '."\n";
             
             }// is wp_enqueue_script
             
@@ -580,8 +582,8 @@ if (!class_exists("ssFlow")) {
         if ( !is_array ( $posts ) ) 
                 return; 	 
         foreach ( $posts as $mypost ) {         
-                if ( false !== strpos ( $mypost->post_content, 'mooflow' ) ) {   
-                        add_action ( "wp_head", array(&$this,"flow_add_js"));
+                if ( false !== strpos ( $mypost->post_content, '[mooflow' ) ) {   
+                        add_action ( "wp_print_scripts", array(&$this,"flow_add_js"));
                         add_action ( "wp_head", array(&$this,"add_Slim"));
                         add_action ( "wp_head", array(&$this,"flow_add_css"));                                              
                         break; 
