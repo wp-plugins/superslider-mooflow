@@ -3,8 +3,8 @@ Contributors: Daiv Mowbray
 Plugin URI: http://wp-superslider.com/
 Tags:animation, animated, images, gallery, mooflow, mootools 1.2, mootools, slider, superslider, slideshow2, menu
 Requires at least: 2.6
-Tested up to: 2.7
-Stable tag: 0.4.1
+Tested up to: 2.8
+Stable tag: 0.5
 
 This is an itunes like image scrubber. Uses the mootools javascript plugin Mooflow from [outcut]( http://www.outcut.de/MooFlow/ "outcut")
 
@@ -79,6 +79,9 @@ Create your own graphic and animation theme based on one of these provided.
 * custom
 
 == HISTORY ==
+
+*0.5  (2009/06/19)
+    - fixed link to image in settings screen
 
 *0.4.1 (2009/04/28)
     -   fixed enqueue script to use wp_print_scripts instead of head.

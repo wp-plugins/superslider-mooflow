@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	/**
    * Should you be doing this?
    */ 	
+   $ssFlow_domain = 'superslider-mooflow'; 
    
 	if ( !current_user_can('manage_options') ) {
 		// Apparently not.
@@ -341,9 +342,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px;">
 	 <label for="op_linked"><?php _e(' With Viewer on, Link images to:',$ssFlow_domain); ?></label>
             <select name="op_linked" id="op_linked">
-                 <option <?php if($ssFlow_newOptions['image'] == "image") echo $selected; ?> id="image" value='image'> image</option>
-                 <option <?php if($ssFlow_newOptions['parent'] == "parent") echo $selected; ?> id="parent" value='parent'> parent</option>
-                 <option <?php if($ssFlow_newOptions['attach'] == "attach") echo $selected; ?> id="attach" value='attach'> attach</option>     
+                 <option <?php if($ssFlow_newOptions['linked'] == "image") echo $selected; ?> id="image" value='image'> image</option>
+                 <option <?php if($ssFlow_newOptions['linked'] == "parent") echo $selected; ?> id="parent" value='parent'> parent</option>
+                 <option <?php if($ssFlow_newOptions['linked'] == "attach") echo $selected; ?> id="attach" value='attach'> attach</option>     
             </select>
        </li>
        <li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px;">

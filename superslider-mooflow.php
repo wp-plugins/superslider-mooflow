@@ -4,7 +4,7 @@ Plugin Name: SuperSlider-Mooflow
 Plugin URI: http://wp-superslider.com/superslider
 Description: This is an itunes like image scrubber. Uses the mootools javascript plugin Mooflow from http://www.outcut.de/MooFlow/
 Author: Daiv Mowbray
-Version: 0.4.1
+Version: 0.5
 Author URI: http://wp-superslider.com
 Tags: animation, animated, mooflow, gallery, slideflow, mootools 1.2, mootools, itunes, slider, superslider, lightbox, apple
 
@@ -24,6 +24,8 @@ Copyright 2008
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /*
+v 0.5 
+    - fixed link to image in settings screen
 v 0.4.1
     -   fixed enqueue script to use wp_print_scripts instead of head.
 v 0.4
@@ -381,6 +383,7 @@ if (!class_exists("ssFlow")) {
 
         if (array_key_exists('id', $atts) && ( $atts['id'] != '')) {
             $id = $atts['id'];
+
             } else{
             $id = $post->ID;;
             }
@@ -440,8 +443,7 @@ if (!class_exists("ssFlow")) {
         $output .= '<div id="mooflow'.$this->flow_id.'" class="moo" style="visibility: hidden;">';
            
           if ($all_attachments !== false) {
-           foreach ( $all_attachments as $id => $attachment ) {
-           
+           foreach ( $all_attachments as $id => $attachment ) {    
 			$my_parent = ($attachment->post_parent);
 			$parent_title = get_the_title($my_parent);
 			$parent_link = get_permalink($my_parent);
