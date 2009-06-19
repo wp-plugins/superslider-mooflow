@@ -420,7 +420,7 @@ if (!class_exists("ssFlow")) {
                 }
 			}	
              
-        } elseif ($id == $post->ID) { 
+        } elseif (($id == $post->ID) || ($id !== '')){ 
              				
                 $all_attachments = get_children( array('post_parent' => $id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );			   
            
