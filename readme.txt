@@ -3,8 +3,8 @@ Contributors: Daiv Mowbray
 Plugin URI: http://wp-superslider.com/
 Tags:animation, animated, images, gallery, mooflow, mootools 1.2, mootools, slider, superslider, slideshow2, menu
 Requires at least: 2.6
-Tested up to: 2.8
-Stable tag: 0.5
+Tested up to: 2.8.2
+Stable tag: 0.6
 
 This is an itunes like image scrubber. Uses the mootools javascript plugin Mooflow from [outcut]( http://www.outcut.de/MooFlow/ "outcut")
 
@@ -80,37 +80,43 @@ Create your own graphic and animation theme based on one of these provided.
 
 == HISTORY ==
 
+*0.6 (2009/07/27)
+
+   * Updated mootools to 1.2.3 
+
 *0.5  (2009/06/19)
-    - fixed link to image in settings screen
+
+    * fixed link to image in settings screen
 
 *0.4.1 (2009/04/28)
-    -   fixed enqueue script to use wp_print_scripts instead of head.
+
+    *   fixed enqueue script to use wp_print_scripts instead of head.
 
 *0.4 (2009/04/20)
 
-    -   added function to pull images from this post attached
-    -   added option to enter random into ID, along with number, pulls x images from media library
-    -   added link to popover/attachment/parent with viewer option.
-    -   added function to enter list of post ids (must have images attached)
-    -   changed the way the short code works. now runs with self closeing single tag [mooflow] 
-    -   fixed multiple mooflows on one page
+    *   added function to pull images from this post attached
+    *   added option to enter random into ID, along with number, pulls x images from media library
+    *   added link to popover/attachment/parent with viewer option.
+    *   added function to enter list of post ids (must have images attached)
+    *   changed the way the short code works. now runs with self closeing single tag [mooflow] 
+    *   fixed multiple mooflows on one page
  
 
 *0.3 (2009/03/12)
 
-	- fixed the viewer on/off via short code bug
-	- switched the milkbox-lightbox image click from double to single.
-	- changed milkbox file names to milkflow
-	- fixed first loaded images visible to hidden  
-	- fixed fullscreen to lightbox pop over error (css z-index)
+  * fixed the viewer on/off via short code bug
+  * switched the milkbox-lightbox image click from double to single.
+  * changed milkbox file names to milkflow
+  * fixed first loaded images visible to hidden  
+  * fixed fullscreen to lightbox pop over error (css z-index)
 
 *0.2 (2009/02/03)
 	
-	- Added insert at cursor for the shortcode metabox
-	- Integrated with SuperSlider-MilkBox...
+  * Added insert at cursor for the shortcode metabox
+  * Integrated with SuperSlider-MilkBox...
 
 *0.1 (2009/01/15)
 
-	- first public launch
+  * first public launch
 
 ---------------------------------------------------------------------------
