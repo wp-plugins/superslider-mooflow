@@ -26,8 +26,8 @@ If you have any problems or suggestions regarding these plugins [please speak up
 
 This plugin can be seen in use here:
 
-* [Demo 1](http://wp-superslider.com/wp-plugins/superslider-mooflow/superslider-mooflow-demo-1"Demo")
-* [Demo 2](http://wp-superslider.com/wp-plugins/superslider-mooflow/superslider-mooflow-demo-2"Demo")
+* [Demo 1](http://wp-superslider.com/2009/mooflow-demo-1"Demo")
+* [Demo 2](http://wp-superslider.com/2009/mooflow-demo-2"Demo")
 
 **Plugins**
 
@@ -78,7 +78,7 @@ Create your own graphic and animation theme based on one of these provided.
 * black
 * custom
 
-== HISTORY ==
+== Changelog ==
 
 *0.6 (2009/07/27)
 
