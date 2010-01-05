@@ -35,8 +35,8 @@ Download These Other Plugins here:
 
 * [SuperSlider](http://wordpress.org/extend/plugins/superslider/ "SuperSlider")
 * [SuperSlider-Show](http://wordpress.org/extend/plugins/superslider-show/ "SuperSlider-Show")
-* [SuperSlider-Menu](http://wordpress.org/extend/plugins/superslider-menu/ "SuperSlider-Menu")
-* [SuperSlider-MilkBox](http://wordpress.org/extend/plugins/superslider-postsincat/ "SuperSlider-PostsinCat")
+* [SuperSlider-Excerpt](http://wordpress.org/extend/plugins/superslider-excerpt/ "SuperSlider-Excerpt")
+* [SuperSlider-PostsinCat](http://wordpress.org/extend/plugins/superslider-postsincat/ "SuperSlider-PostsinCat")
 
 Or download from the domain [wp-superslider.com](http://wp-superslider.com/downloadsuperslider/superslider-mooflow-download "SuperSlider-Downloads")
 
