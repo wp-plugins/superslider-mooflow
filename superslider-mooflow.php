@@ -23,20 +23,7 @@ Copyright 2008
     along with Collapsing Categories; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-/*
-v 0.5 
-    - fixed link to image in settings screen
-v 0.4.1
-    -   fixed enqueue script to use wp_print_scripts instead of head.
-v 0.4
-    -   added function to pull images from this post attached
-    -   added function to enter list of post ids
-    -   added option to enter random into ID, along with number, pulls x images from media library
-    -   changed the way the short code works. now runs with self closeing single tag [mooflow] 
-    -   fixed multiple mooflows on one page
-    -   added link to popover/attachment/parent with viewer option.
 
-*/
 if (!class_exists("ssFlow")) {
 	class ssFlow {
 	
@@ -247,7 +234,7 @@ if (!class_exists("ssFlow")) {
 		/**
 		* Removes user set options from data Flow upon deactivation
 		*/		
-	function flow_ops_deactivation(){
+	function ssFlow_ops_deactivation(){
 		delete_option($this->AdminOptionsName);
 	}
 
