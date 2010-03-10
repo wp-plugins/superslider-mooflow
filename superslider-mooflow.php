@@ -1,12 +1,11 @@
 <?php
 /*
 Plugin Name: SuperSlider-Mooflow
-Plugin URI: http://wp-superslider.com/superslider
+Plugin URI: http://wp-superslider.com/superslider/superslider-mooflow
 Description: This is an itunes like image scrubber. Uses the mootools javascript plugin Mooflow from http://www.outcut.de/MooFlow/
 Author: Daiv Mowbray
-Version: 0.6
 Author URI: http://wp-superslider.com
-Tags: animation, animated, mooflow, gallery, slideflow, mootools 1.2, mootools, itunes, slider, superslider, lightbox, apple
+Version: 0.7
 
 Copyright 2008
        SuperSlider-flow is free software; you can redistribute it and/or
@@ -43,6 +42,7 @@ if (!class_exists("ssFlow")) {
 		var $css_path;
 		var $css_loaded;
 		var $Flow_over_ride;
+		var $show_over_ride;
 		var $Slim_over_ride;
 		var $ssFlowOpOut;
 		var $ssBaseOpOut;
@@ -88,7 +88,7 @@ if (!class_exists("ssFlow")) {
 	
 	function Flow() {
 
-			register_activation_hook(__FILE__, array(&$this,'ssFlow_init') ); //http://codex.wordpress.org/Function_Reference/register_activation_hook
+			register_activation_hook(__FILE__, array(&$this,'flow_init') ); //http://codex.wordpress.org/Function_Reference/register_activation_hook
 			register_deactivation_hook( __FILE__, array(&$this,'ssFlow_ops_deactivation') ); //http://codex.wordpress.org/Function_Reference/register_deactivation_hook
 			
 			add_action( 'init', array(&$this,'flow_init' ) );
@@ -120,7 +120,7 @@ if (!class_exists("ssFlow")) {
 				"usewindowresize" => "true",
 				"usemousewheel" => "true",
 				"usekeyinput" => "true",
-				"addslim" => "true",
+				"addslim" => "false",
 				"addjson" => "false",
 				"addajax" => "false",
 				"useviewer" => "true",
@@ -166,6 +166,14 @@ if (!class_exists("ssFlow")) {
 			}else{
 			$this->base_over_ride = 'false';
 			}
+			
+			// lets see if the ss-Show plugin is here
+			if (class_exists('ssShow')) {
+					$this->show_over_ride = 'true';
+				}else{
+				$this->show_over_ride = 'false';
+				}
+				
 			if (class_exists('ssSlim')) {
 				$this->Slim_over_ride = 'true';
 			}else{
@@ -201,7 +209,7 @@ if (!class_exists("ssFlow")) {
 	function flow_setup_optionspage() {
 		if (  function_exists('add_options_page') ) {
 			if (  current_user_can('manage_options') ) {
-				add_options_page(__('SuperSlider Flow'),__('SuperSlider-Flow'), 8, 'superslider-flow', array(&$this, 'flow_ui'));
+				if (!class_exists('ssBase')) add_options_page(__('SuperSlider Flow'),__('SuperSlider-Flow'), 8, 'superslider-flow', array(&$this, 'flow_ui'));
 				add_filter('plugin_action_links', array(&$this, 'filter_plugin_flow'), 10, 2 );
 				//add_action('admin_head', array(&$this,'ssbox_admin_style'));
 			}					
@@ -226,7 +234,7 @@ if (!class_exists("ssFlow")) {
 			if (  ! $this_plugin ) $this_plugin = plugin_basename(__FILE__);
 
 		if (  $file == $this_plugin )
-			$settings_link = '<a href="options-general.php?page=superslider-flow">'.__('Settings').'</a>';
+			$settings_link = '<a href="admin.php?page=superslider-flow">'.__('Settings').'</a>';
 			array_unshift( $links, $settings_link ); //  before other links
 			return $links;
 	}
@@ -472,6 +480,9 @@ if (!class_exists("ssFlow")) {
 		 } // end foreach	
         } // end if attachments are empty 
         $output .= $content.'</div>';
+        
+//var_dump ($this->ssFlowOpOut);
+
         return do_shortcode($output);
         
     }

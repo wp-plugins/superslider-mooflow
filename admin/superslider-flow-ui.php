@@ -56,7 +56,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
                 "image_size" => 'thumbnail'
                 );//end array
 			
-			update_option($this->AdminOptionsName, $ssFlow_OldOptions);
+			update_option('ssFlow_options', $ssFlow_OldOptions);
 				
 			echo '<div id="message" class="updated fade"><p><strong>' . __( 'superslider Default Options reloaded.', 'superslider' ) . '</strong></p></div>';
 			
@@ -94,11 +94,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				'image_size'	=> $_POST["op_image_size"]
 			);	
 
-		update_option($this->AdminOptionsName, $ssFlow_newOptions);
+		update_option('ssFlow_options', $ssFlow_newOptions);
 
 		}	
 
-		$ssFlow_newOptions = get_option($this->AdminOptionsName);   
+		$ssFlow_newOptions = get_option('ssFlow_options');   
 
 	/**
 	*	Let's get some variables for multiple instances
@@ -119,16 +119,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 <img src="<?php echo $site ?>/wp-content/plugins/superslider-show/admin/img/logo_superslider.png" style="margin-bottom: -15px;padding: 20px 20px 0px 20px;" alt="SuperSlider Logo" width="52" height="52" border="0" /></a>
   <h2 style="display:inline; position: relative;">SuperSlider-Flow Options</h2>
  </div><br style="clear:both;" />
- <table class="form-table">	
-	<tr
-<?php if ($this->base_over_ride != "on") { 
+ <script type="text/javascript">
+// <![CDATA[
+
+function create_ui_tabs() {
+
+
+    jQuery(function() {
+        var selector = '#ssslider';
+            if ( typeof jQuery.prototype.selector === 'undefined' ) {
+            // We have jQuery 1.2.x, tabs work better on UL
+            selector += ' > ul';
+        }
+        jQuery( selector ).tabs({ fxFade: true, fxSpeed: 'slow' });
+
+    });
+}
+
+jQuery(document).ready(function(){
+        create_ui_tabs();
+});
+
+// ]]>
+</script>
+<div id="ssslider" class="ui-tabs">
+    <ul id="ssnav" class="ui-tabs-nav">
+        <li <?php if ($this->base_over_ride != "on") { 
+  		 echo '';
+  		} else {
+  		echo 'style="display:none;"';
+  		}?>	class="ui-state-default" ><a href="#fragment-1"><span>Appearance</span></a></li>
+        <li class="ui-tabs-selected"><a href="#fragment-2"><span>Transition & Design</span></a></li>
+        <li class="ui-state-default"><a href="#fragment-3"><span>Images and Controls</span></a></li>
+        <li <?php if ($this->base_over_ride != "on") { 
+  		 echo '';
+  		} else {
+  		echo 'style="display:none;"';
+  		}?>	class="ss-state-default" ><a href="#fragment-4"><span>File storage</span></a></li>
+    </ul>
+
+    <div id="fragment-1" class="ss-tabs-panel">
+ 	<div <?php if ($this->base_over_ride != "on") { 
   		 echo '';
   		} else {
   		echo 'style="display:none;"';
   		}?>	
 	>
-	<th scope="row">MooFlow Appearance</th>
-		<td width="70%" valign="top">
+	<h3>MooFlow Appearance</h3>
+
 		<fieldset style="border:1px solid grey;margin:10px;padding:10px 10px 10px 30px;"><!-- Theme options start -->  	
 		<legend><b><?php _e(' Themes',$ssFlow_domain); ?>:</b></legend>
 	
@@ -164,18 +202,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	</table>
      <br /><span class="setting-description"><?php _e('  Choose a theme for your MooFlow. ',$ssFlow_domain); ?></span>
     
+    
+      </fieldset>
+      </div>
+    </div><!--  close frag 1-->
 
-  </fieldset>
-  </td>
-		<td width="30%" valign="top">
-		
-		</td>
-	</tr>
+	<div id="fragment-2" class="ss-tabs-panel">
+	<h3 class="title">Transitions</h3>
 	
-	<tr><th scope="row">Options</th>
-		<td  width="70%" valign="top">
 		<fieldset style="border:1px solid grey;margin:10px;padding:10px 10px 10px 30px;"><!-- MooFlow options start -->
-   <legend><b><?php _e(' Personalize Appearence',$ssFlow_domain); ?>:</b></legend>
+   <legend><?php _e(' Personalize Transitions and Design',$ssFlow_domain); ?>:</legend>
    <ul style="list-style-type: none;">
      <li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px;">	
             
@@ -221,123 +257,134 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		 value="<?php echo ($ssFlow_newOptions['bgcolor']); ?>" /></label> 
 		 <span class="setting-description"><?php _e('Display area color. (default #fff)',$ssFlow_domain); ?></span>
 	</li> 
-	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 45%; float: left;">		
-        <label  for="op_useAutoPlayon">
-            <input type="radio" 
-            <?php if($ssFlow_newOptions['useautoplay'] == "true") echo $checked; ?> name="op_useAutoPlay" id="op_useAutoPlayon" value="true" /> 
-            <?php _e(' Include Play - Stop buttons on.',$ssFlow_domain); ?>
-            </label>
-            <br />
-        <label  for="op_useAutoPlayoff">
-            <input type="radio" 
-            <?php if($ssFlow_newOptions['useautoplay'] == "false") echo $checked; ?>  name="op_useAutoPlay" id="op_useAutoPlayoff" value="false" />
-            <?php _e(' Play - Stop buttons off.',$ssFlow_domain); ?>
-            </label>
-      </li> 
-	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 45%; float: left;">	
-        <label  for="op_useCaptionon">
-            <input type="radio" 
-            <?php if($ssFlow_newOptions['usecaption'] == "true") echo $checked; ?> name="op_useCaption" id="op_useCaptionon" value="true" /> 
-            <?php _e(' Image captions on (default).',$ssFlow_domain); ?>
-            </label>
-            <br />
-        <label  for="op_useCaptionoff">
-            <input type="radio" 
-            <?php if($ssFlow_newOptions['usecaption'] == "false") echo $checked; ?>  name="op_useCaption" id="op_useCaptionoff" value="false" />
-            <?php _e(' Image captions off.',$ssFlow_domain); ?>
-            </label>			
-	</li> 
-	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 45%; float: left;">	
+ 
+	</ul>
+	</fieldset>
+</div><!--  close frag 2-->
+
+	<div id="fragment-3" class="ss-tabs-panel">
+	<h3 class="title">Personalize</h3>
+	
+		<fieldset style="border:1px solid grey;margin:10px;padding:10px 10px 10px 30px;"><!-- MooFlow options start -->
+   <legend><?php _e(' Personalize Images and Controls',$ssFlow_domain); ?>:</legend>
+   <ul style="list-style-type: none;">
+	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 30%; float: left;">	
         <label  for="op_useResizeon">
-            <input type="radio" 
+            <input type="checkbox" 
             <?php if($ssFlow_newOptions['useresize'] == "true") echo $checked; ?> name="op_useResize" id="op_useResizeon" value="true" /> 
-            <?php _e(' Image resize on (default).',$ssFlow_domain); ?>
+            <?php _e(' Image resize on.',$ssFlow_domain); ?>
             </label>
             <br />
-        <label  for="op_useResizeoff">
+        <!--<label  for="op_useResizeoff">
             <input type="radio" 
             <?php if($ssFlow_newOptions['useresize'] == "false") echo $checked; ?>  name="op_useResize" id="op_useResizeoff" value="false" />
             <?php _e(' Image resize off.',$ssFlow_domain); ?>
-            </label>			
+            </label>-->		
 	</li>
-	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 45%; float: left;">		
-        <label  for="op_useSlideron">
-            <input type="radio" 
-            <?php if($ssFlow_newOptions['useslider'] == "true") echo $checked; ?> name="op_useSlider" id="op_useSlideron" value="true" /> 
-            <?php _e(' Show Image Slider on (default).',$ssFlow_domain); ?>
+		<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 30%; float: left;">		
+        <label  for="op_useAutoPlayon">
+            <input type="checkbox" 
+            <?php if($ssFlow_newOptions['useautoplay'] == "true") echo $checked; ?> name="op_useAutoPlay" id="op_useAutoPlayon" value="true" /> 
+            <?php _e(' Include Play - Stop buttons.',$ssFlow_domain); ?>
             </label>
             <br />
-        <label  for="op_useSlideroff">
+       <!-- <label  for="op_useAutoPlayoff">
+            <input type="radio" 
+            <?php if($ssFlow_newOptions['useautoplay'] == "false") echo $checked; ?>  name="op_useAutoPlay" id="op_useAutoPlayoff" value="false" />
+            <?php _e(' Play - Stop buttons off.',$ssFlow_domain); ?>
+            </label>-->
+      </li> 
+	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 30%; float: left;">	
+        <label  for="op_useCaptionon">
+            <input type="checkbox" 
+            <?php if($ssFlow_newOptions['usecaption'] == "true") echo $checked; ?> name="op_useCaption" id="op_useCaptionon" value="true" /> 
+            <?php _e(' Image captions on .',$ssFlow_domain); ?>
+            </label>
+            <br />
+       <!-- <label  for="op_useCaptionoff">
+            <input type="radio" 
+            <?php if($ssFlow_newOptions['usecaption'] == "false") echo $checked; ?>  name="op_useCaption" id="op_useCaptionoff" value="false" />
+            <?php _e(' Image captions off.',$ssFlow_domain); ?>
+            </label>	-->		
+	</li>
+	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 30%; float: left;">		
+        <label  for="op_useSlideron">
+            <input type="checkbox" 
+            <?php if($ssFlow_newOptions['useslider'] == "true") echo $checked; ?> name="op_useSlider" id="op_useSlideron" value="true" /> 
+            <?php _e(' Show Image Slider on.',$ssFlow_domain); ?>
+            </label>
+            <br />
+        <!--<label  for="op_useSlideroff">
             <input type="radio" 
             <?php if($ssFlow_newOptions['useslider'] == "false") echo $checked; ?>  name="op_useSlider" id="op_useSlideroff" value="false" />
             <?php _e(' Image Slider off.',$ssFlow_domain); ?>
-            </label>			
+            </label>-->			
 	</li> 
-	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 45%; float: left;">	
+	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 30%; float: left;">	
         <label  for="op_useWindowResizeon">
-            <input type="radio" 
+            <input type="checkbox" 
             <?php if($ssFlow_newOptions['usewindowresize'] == "true") echo $checked; ?> name="op_useWindowResize" id="op_useWindowResizeon" value="true" /> 
-            <?php _e(' Fullscreen button on (default).',$ssFlow_domain); ?>
+            <?php _e(' Fullscreen button on.',$ssFlow_domain); ?>
             </label>
             <br />
-        <label  for="op_useWindowResizeoff">
+        <!--<label  for="op_useWindowResizeoff">
             <input type="radio" 
             <?php if($ssFlow_newOptions['usewindowresize'] == "false") echo $checked; ?>  name="op_useWindowResize" id="op_useWindowResizeoff" value="false" />
             <?php _e(' Fullscreen button off.',$ssFlow_domain); ?>
-            </label>			
+            </label>-->			
 	</li>
-	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 45%; float: left;">		
+	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 30%; float: left;">		
         <label  for="op_useMouseWheelon">
-            <input type="radio" 
+            <input type="checkbox" 
             <?php if($ssFlow_newOptions['usemousewheel'] == "true") echo $checked; ?> name="op_useMouseWheel" id="op_useMouseWheelon" value="true" /> 
-            <?php _e(' Mouse wheel on (default).',$ssFlow_domain); ?>
+            <?php _e(' Mouse wheel on.',$ssFlow_domain); ?>
             </label>
             <br />
-        <label  for="op_useMouseWheeloff">
+        <!--<label  for="op_useMouseWheeloff">
             <input type="radio" 
             <?php if($ssFlow_newOptions['usemousewheel'] == "false") echo $checked; ?>  name="op_useMouseWheel" id="op_useMouseWheeloff" value="false" />
             <?php _e(' Mouse wheel off.',$ssFlow_domain); ?>
-            </label>			
+            </label>-->		
 	 </li> 
-	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 95%; float: left;">	
+	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 60%; float: left;">	
         <label  for="op_useKeyInputon">
-            <input type="radio" 
+            <input type="checkbox" 
             <?php if($ssFlow_newOptions['usekeyinput'] == "true") echo $checked; ?> name="op_useKeyInput" id="op_useKeyInputon" value="true" /> 
-            <?php _e(' Key input on (default).',$ssFlow_domain); ?>
+            <?php _e(' Key input on.',$ssFlow_domain); ?>
             </label>
             <br />
-        <label  for="op_useKeyInputoff">
+        <!--<label  for="op_useKeyInputoff">
             <input type="radio" 
             <?php if($ssFlow_newOptions['usekeyinput'] == "false") echo $checked; ?>  name="op_useKeyInput" id="op_useKeyInputoff" value="false" />
             <?php _e(' Key input off.',$ssFlow_domain); ?>
-            </label>			
+            </label>-->			
 	</li>
 
-	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 45%; float: left;">		
+	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 60%; float: left;">		
         <label  for="op_useVieweron">
-            <input type="radio" 
+            <input type="checkbox" 
             <?php if($ssFlow_newOptions['useviewer'] == "true") echo $checked; ?> name="op_useViewer" id="op_useVieweron" value="true" /> 
-            <?php _e(' Viewer on (default).',$ssFlow_domain); ?>
+            <?php _e(' Viewer on, (Not compatible with Slimbox).',$ssFlow_domain); ?>
             </label>
             <br />
-        <label  for="op_useVieweroff">
+       <!--  <label  for="op_useVieweroff">
             <input type="radio" 
             <?php if($ssFlow_newOptions['useviewer'] == "false") echo $checked; ?>  name="op_useViewer" id="op_useVieweroff" value="false" />
             <?php _e(' Viewer off.(Not compatible with Slimbox)',$ssFlow_domain); ?>
-            </label>			
+            </label>	-->		
 	</li>
-	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 50%; float: left;">		
+	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 60%; float: left;">		
         <label  for="op_op_addslimon">
-            <input type="radio" 
+            <input type="checkbox" 
             <?php if($ssFlow_newOptions['addslim'] == "true") echo $checked; ?> name="op_addslim" id="op_addslimon" value="true" /> 
-            <?php _e(' add Slimbox on (default).',$ssFlow_domain); ?>
+            <?php _e(' add Slimbox on, (Not compatible with Viewer).',$ssFlow_domain); ?>
             </label>
-            <br />
+           <!-- <br />
         <label  for="op_addslim">
             <input type="radio" 
             <?php if($ssFlow_newOptions['addslim'] == "false") echo $checked; ?>  name="op_addslim" id="op_addslim" value="false" />
             <?php _e(' Slimbox off.(Not compatible with Viewer)',$ssFlow_domain); ?>
-            </label>			
+            </label>-->			
 	</li><br style="clear:both;"/>
 	<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px;">
 	 <label for="op_linked"><?php _e(' With Viewer on, Link images to:',$ssFlow_domain); ?></label>
@@ -361,11 +408,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	   <li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px;">
 				<label for="op_image_size"><?php _e(' MooFlow Image size to use.',$ssFlow_domain); ?></label>
 				<select name="op_image_size" id="op_image_size">
+				<option <?php if ($this->show_over_ride == "true") { 
+  		 echo '';
+  		} else {
+  		echo 'style="display:none;"';
+  		}?> <?php if($ssFlow_newOptions['thumbsize'] == "minithumb") echo $selected; ?> id="op_image_size0" value='minithumb'> minithumb</option>
 					 <option <?php if($ssFlow_newOptions['image_size'] == "thumbnail") echo $selected; ?> id="op_image_size1" value='thumbnail'> thumbnail</option>
 					 <option <?php if($ssFlow_newOptions['image_size'] == "medium") echo $selected; ?> id="op_image_size2" value='medium'> medium</option>
-					 <option <?php if($ssFlow_newOptions['image_size'] == "slideshow") echo $selected; ?> id="op_image_size3" value='slideshow'>custom slideshow</option>
-					 <option <?php if($ssFlow_newOptions['image_size'] == "large") echo $selected; ?> id="op_image_size4" value='large'> large</option>
-					 <option <?php if($ssFlow_newOptions['image_size'] == "full") echo $selected; ?> id="op_image_size5" value='full'> full</option>
+				<option <?php if ($this->show_over_ride == "true") { 
+  		 echo '';
+  		} else {
+  		echo 'style="display:none;"';
+  		}?> <?php if($ssFlow_newOptions['thumbsize'] == "excerpt") echo $selected; ?> id="op_image_size3" value='excerpt'> excerpt</option>
+					 <option <?php if($ssFlow_newOptions['image_size'] == "slideshow") echo $selected; ?> id="op_image_size4" value='slideshow'> slideshow</option>
+					 <option <?php if($ssFlow_newOptions['image_size'] == "large") echo $selected; ?> id="op_image_size5" value='large'> large</option>
+					 <option <?php if($ssFlow_newOptions['image_size'] == "full") echo $selected; ?> id="op_image_size6" value='full'> full</option>
 				</select>
 				<span class="setting-description"><?php _e(' Which image size to set as default for all Mooflow shows.',$ssFLow_domain); ?></span>
 			</li>
@@ -401,31 +458,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
      </ul>
   </fieldset>
-  
-  </td>
-		<td valign="top" width="30%">
-		<p class="submit">
-		<input type="submit" id="update1" class="button-primary" value="<?php _e(' Update options',$ssFlow_domain); ?> &raquo;" />
-		</p>
-		<p><?php _e('These options are global. You can modify most options within your individual post by adding options to the shortcode.',$ssFlow_domain); ?>
-		</p>
-		
-		</td>
-	</tr>
+ </div><!--  close frag 3--> 
+ 
 
-	<tr
+<div id="fragment-4" class="ss-tabs-panel">
+	
+	<div
 <?php if ($this->base_over_ride != "on") { 
   		 echo '';
   		} else {
   		echo 'style="display:none;"';
   		}?> 
-	><th scope="row">File Storage</th>
-		<td>
-
+	>
+	<h3 class="title">File Storage</h3>
 	<fieldset style="border:1px solid grey;margin:10px;padding:10px 10px 10px 30px;">
    			<legend><b><?php _e(' Loading Options'); ?>:</b></legend>
-  		 <ul style="list-style-type: none;">
-  		<li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 45%; float: left;">
+  	
+  	<ul style="list-style-type: none;">
+  	  <li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px;">
     	<label for="op_load_moo">
     	<input type="checkbox" 
     	<?php if($ssFlow_newOptions['load_moo'] == "on") echo $checked; ?> name="op_load_moo" id="op_load_moo" />
@@ -433,12 +483,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
     	
 	</li>
 	
-    <li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px; width: 45%; float: left;">
+    <li style="border-bottom:1px solid #cdcdcd; padding: 6px 0px 8px 0px;">
 
     	<label for="op_css_load1">
 			<input type="radio" name="op_css_load" id="op_css_load1"
 			<?php if($ssFlow_newOptions['css_load'] == "default") echo $checked; ?> value="default" />
-			<?php _e(' Load css from default location. superslider-show plugin folder.',$ssFlow_domain); ?></label><br />
+			<?php _e(' Load css from default location. superslider-mooflow plugin folder.',$ssFlow_domain); ?></label><br />
     	<label for="op_css_load2">
 			<input type="radio" name="op_css_load"  id="op_css_load2"
 			<?php if($ssFlow_newOptions['css_load'] == "pluginData") echo $checked; ?> value="pluginData" />
@@ -451,8 +501,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
     </li>
     </ul>
      </fieldset>
-     </td>
-		<td valign="top">
+
+
 <?php if ($base_over_ride != "on") { 
   		 echo '<p ';
   		} else {
@@ -460,10 +510,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
   		}?>
 		><?php _e(' If your theme or any other plugin loads the mootools 1.2 javascript framework into your file header, you can disactivate it here.',$ssFlow_domain); ?></p>
 		<p><?php _e(' Via ftp, move the folder named plugin-data from this plugin folder into your wp-content folder. This is recomended to avoid over writing any changes you make to the css files when you update this plugin.',$ssFlow_domain); ?>
-		</p></td>
-	</tr>
+		</p>
 	
-</table>
+	</div><!-- close frag 3 -->
+</div><!--  close tabs -->
+
 <p class="submit">
 		<input type="submit" name="set_defaults" value="<?php _e(' Reload Default Options',$ssFlow_domain); ?> &raquo;" />
 		<input type="submit" id="update4" class="button-primary" value="<?php _e(' Update options',$ssFlow_domain); ?> &raquo;" />

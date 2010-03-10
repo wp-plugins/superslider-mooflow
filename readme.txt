@@ -1,10 +1,11 @@
 === SuperSlider-MooFlow ===
 Contributors: Daiv Mowbray
-Plugin URI: http://wp-superslider.com/
+Plugin URI: http://wp-superslider.com/superslider/superslider-mooflow
+http://wp-superslider.com/support-me/donate/
 Tags:animation, animated, images, gallery, mooflow, mootools 1.2, mootools, slider, superslider, slideshow2, menu
 Requires at least: 2.6
-Tested up to: 2.9.1
-Stable tag: 0.6
+Tested up to: 2.9.2
+Stable tag: 0.7
 
 This is an itunes like image scrubber. Uses the mootools javascript plugin Mooflow from [outcut]( http://www.outcut.de/MooFlow/ "outcut")
 
@@ -79,6 +80,12 @@ Create your own graphic and animation theme based on one of these provided.
 * custom
 
 == Changelog ==
+
+*0.7 (2010/03/10)
+
+   * Updated WP 2.9
+   * Added as submenu for superslider
+   * improved options getting and setting
 
 *0.6 (2009/07/27)
 
