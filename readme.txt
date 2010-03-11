@@ -1,7 +1,7 @@
 === SuperSlider-MooFlow ===
 Contributors: Daiv Mowbray
 Plugin URI: http://wp-superslider.com/superslider/superslider-mooflow
-http://wp-superslider.com/support-me/donate/
+Donate link: http://wp-superslider.com/support-me/donate/
 Tags:animation, animated, images, gallery, mooflow, mootools 1.2, mootools, slider, superslider, slideshow2, menu
 Requires at least: 2.6
 Tested up to: 2.9.2
@@ -53,6 +53,10 @@ Or download from the domain [wp-superslider.com](http://wp-superslider.com/downl
 * Unpack contents to wp-content/plugins/ into a **superslider-mooflow** directory
 * Activate the plugin,
 * Configure global settings for plugin under > settings > SuperSlider-Mooflow
+
+== Upgrade Notice ==
+
+You may need to re-save your settings/ options when upgrading
 
 == Usage ==
 
